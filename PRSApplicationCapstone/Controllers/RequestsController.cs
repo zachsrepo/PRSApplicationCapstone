@@ -31,7 +31,9 @@ namespace PRSApplicationCapstone.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Request>> GetRequest(int id)
         {
-            var request = await _context.Requests.FindAsync(id);
+            var request = await _context.Requests.Include(n => n.RequestLines)
+                                                 .ThenInclude(n => n.Product)
+                                                 .SingleOrDefaultAsync(x => x.Id == id);
 
             if (request == null)
             {
@@ -45,7 +47,7 @@ namespace PRSApplicationCapstone.Controllers
         public async Task<ActionResult<IEnumerable<Request>>> GetRequestsInReview(int userid)
         {
             return await (from reviews in _context.Requests
-                          where reviews.Id != userid && reviews.Status == "REVIEW"
+                          where reviews.UserId != userid && reviews.Status == "REVIEW"
                           select reviews).ToListAsync();    
         }
         // PUT: api/requests/review/5
