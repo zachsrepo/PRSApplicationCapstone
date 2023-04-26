@@ -24,14 +24,14 @@ namespace PRSApplicationCapstone.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Request>>> GetRequests()
         {
-            return await _context.Requests.ToListAsync();
+            return await _context.Requests.Include(n => n.User).ToListAsync();
         }
 
         // GET: api/Requests/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Request>> GetRequest(int id)
         {
-            var request = await _context.Requests.Include(n => n.RequestLines)
+            var request = await _context.Requests.Include(n => n.User).Include(n => n.RequestLines)
                                                  .ThenInclude(n => n.Product)
                                                  .SingleOrDefaultAsync(x => x.Id == id);
 
