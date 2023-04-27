@@ -48,7 +48,7 @@ namespace PRSApplicationCapstone.Controllers
         {
             return await (from reviews in _context.Requests
                           where reviews.UserId != userid && reviews.Status == "REVIEW"
-                          select reviews).ToListAsync();    
+                          select reviews).Include(n => n.User).ToListAsync();    
         }
         // PUT: api/requests/review/5
         [HttpPut("review/{id}")]
