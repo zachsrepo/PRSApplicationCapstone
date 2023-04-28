@@ -30,6 +30,12 @@ namespace PRSApplicationCapstone.Controllers
                             {
                                 reqLineTotal = reqL.Quantity * product.Price
                             }).Sum(n => n.reqLineTotal);
+            if(request.Status == "REJECTED" || request.Status == "APPROVED")
+            {
+                request.Status = "EDIT";
+                request.RejectionReason = "";
+            }
+
             await _context.SaveChangesAsync();
             return Ok();
         }
